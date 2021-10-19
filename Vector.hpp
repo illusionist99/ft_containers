@@ -1,14 +1,15 @@
 # pragma once
 
 # include <iostream>
-# include <string>
+
 
 template < class T, class Alloc = std::allocator<T> >
 class Vector
 {
 
 	public:
-
+		typedef T value_type;
+		
 		Vector();
 		Vector( Vector const & src );
 		~Vector();
@@ -68,12 +69,20 @@ class Vector
 
 		// relational operators
 
-		bool operator== (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
-		bool operator!= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
-		bool operator<  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
-		bool operator<= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
-		bool operator>  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
-		bool operator>= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
+
 };
+
+template< class T, class Alloc >
+bool operator== (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);		
+template< class T, class Alloc >
+bool operator!= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
+template< class T, class Alloc >
+bool operator<  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
+template< class T, class Alloc >
+bool operator<= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
+template< class T, class Alloc >
+bool operator>  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
+template< class T, class Alloc >
+bool operator>= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs);
 
 //std::ostream &			operator<<( std::ostream & o, Vector const & i );
