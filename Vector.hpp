@@ -15,6 +15,38 @@ template<
 
 	public:
 
+
+	class myIterator {
+
+		private:
+			T *_array;
+
+		public:
+
+			// defining tags
+			using iterator_category =  std::random_access_iterator_tag;
+			using difference_type = std::ptrdiff_t;
+			using value_type = T;
+			using pointer = T*;
+			using reference = T&;
+			
+			myIterator(pointer array) : _array(array) {}
+			myIterator(reference const o) {
+				_array = o;
+			}
+			~myIterator(void);
+			reference operator=(reference const o) {
+			
+				_array = o;
+				return (*this);
+			}
+			reference operator*() const { return *_array; }
+			pointer operator->() { return _array; }
+
+
+	}
+
+
 	typedef  T value_type;
 	typedef Allocator allocator_type;
 	typedef size_t size_type;
