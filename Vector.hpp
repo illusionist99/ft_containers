@@ -57,14 +57,51 @@ template<
 			_array++;
 			return *this;
 		}
+		myIterator &operator--() {
+		
+			_array--;
+			return *this;
+		}
 		myIterator operator++(int) {
 		
 			myIterator tmp = *this;
 			++(*this);
 			return tmp;
 		}
+		myIterator operator--(int) {
+		
+			myIterator tmp = *this;
+			--(*this);
+			return tmp;
+		}
+		friend value_type operator+(value_type v, reference val) {
+		
+			v += val;
+			return (v);
+		}
+		friend value_type operator-(value_type v, reference val) {
+		
+			v -= val;
+			return (v);
+		}
+		inline bool operator< (reference rval){ 
 
-
+			return (rval < *_array);	
+		}
+		inline bool operator> (reference rval) {
+			
+			return rval < *_array;
+		}
+		
+		inline bool operator<=(reference rval) {
+		
+			return !(*_array > rval);
+		}
+		
+		inline bool operator>=(reference rval) {
+		
+			return !(*_array < rval);
+		}
 	};
 	myIterator begin() {
 
@@ -121,11 +158,17 @@ template<
 		return (*this);
 	}
 // //	range (3)	
-	// template <class InputIterator>
-	// Vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) {
+	template <class InputIterator>
+	Vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) {
 	
+		size_t size = std::distance(first, last);
+		size_t index = 0;
+		_elements = _alloc.allocate(size);
+		for (InputIterator i = first; i < last; i++) {
 		
-	// }
+			_alloc.construct(_elements + index, *i);
+		}
+	}
 
 // //	copy (4)	
 	Vector (const Vector& x) {
@@ -331,12 +374,16 @@ template<
 	void clear() {
 	
 		for (int i=0;i < _size; i++) {
-		
-			std::cout << "destroyed  id " << i  << " value " << _elements[i] << std::endl;
+
 			_alloc.destroy(_elements + i);
 		}
-		// if (_elements != NULL)
-		// 	_alloc.deallocate(_elements, _size);
+		if (_elements != NULL) {
+
+			_alloc.deallocate(_elements, _size);
+			_size = 0;
+			_capacity = 0;
+			_elements = NULL;
+		}
 	}
 };	
 

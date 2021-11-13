@@ -1,10 +1,10 @@
 # include "Vector.hpp"
-
+# include <vector>
 
 int main(void) {
 
     Vector<int> a(5);
-    Vector<int> dyalhum(5);
+    std::vector<int> dyalhum(5);
     // for (int i=0; i< 5; i++) {
     
     //     std::cout << a[i] << std::endl;
@@ -19,8 +19,12 @@ int main(void) {
     // for (int i=0; i < a.size(); i++) {
     //     std::cout << a[i] << std::endl;
     // }
-    a.clear();
-    dyalhum.clear();
+    // a.clear();
+    // dyalhum.clear();
+    // ++dyalhum[0];
+    // ++a[0];
+
+    
     // a.push_back(222);
     // a.push_back(200);
     // a.push_back(666);
