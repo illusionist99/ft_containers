@@ -4,7 +4,7 @@
 int main(void) {
 
     Vector<int> a(5);
-
+    Vector<int> dyalhum(5);
     // for (int i=0; i< 5; i++) {
     
     //     std::cout << a[i] << std::endl;
@@ -13,16 +13,20 @@ int main(void) {
     std::cout << a.max_size() << std::endl;
     a.resize(5);
     a.resize(8,100);
+
+    dyalhum.resize(5);
+    dyalhum.resize(8,100);
     // for (int i=0; i < a.size(); i++) {
     //     std::cout << a[i] << std::endl;
     // }
     a.clear();
-    a.push_back(222);
-    a.push_back(200);
-    a.push_back(666);
-    a.push_back(888);
-    a.pop_back();
-    a.pop_back();
+    dyalhum.clear();
+    // a.push_back(222);
+    // a.push_back(200);
+    // a.push_back(666);
+    // a.push_back(888);
+    // a.pop_back();
+    // a.pop_back();
 
     // a.pop_back();
     // a.pop_back();
@@ -42,6 +46,16 @@ int main(void) {
         // i = 555;
         std::cout << a[i] << std::endl;
     }
+    }
+    catch (std::exception & e) {
+        std::cout << e.what() << std::endl;
+    }
+    std::cout << "**********************\n";
+    try {
+        for (int i=0; i < dyalhum.size(); i++) {
+            // i = 555;
+            std::cout << dyalhum[i] << std::endl;
+        }
     }
     catch (std::exception & e) {
         std::cout << e.what() << std::endl;

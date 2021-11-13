@@ -15,38 +15,66 @@ template<
 
 	public:
 
-
 	class myIterator {
 
-		private:
-			T *_array;
-
+		T *_array;
 		public:
+		// defining tags
+		// using iterator_category =  std::random_access_iterator_tag;
+		// using difference_type = std::ptrdiff_t;
+		// using value_type = T;
+		// using pointer = T*;
+		// using reference = T&;
 
-			// defining tags
-			using iterator_category =  std::random_access_iterator_tag;
-			using difference_type = std::ptrdiff_t;
-			using value_type = T;
-			using pointer = T*;
-			using reference = T&;
+		typedef std::random_access_iterator_tag  iterator_category;
+		typedef	std::ptrdiff_t	difference_type;
+		typedef T value_type;
+		typedef T*  pointer;
+		typedef T& reference;
+		myIterator(pointer array) : _array(array) {}
+		myIterator( reference o) {
+			_array = o._array;
+		}
+		~myIterator(void);
+		reference operator=( reference o) {
+		
+			_array = o;
+			return (*this);
+		}
+		reference operator*() const { return *_array; }
+		pointer operator->() { return _array; }
+
+		friend bool operator== ( reference a,  reference b) {
+
+			return a._array == b._array;
+		};
+		friend bool operator!= ( myIterator& a,  myIterator& b) {
 			
-			myIterator(pointer array) : _array(array) {}
-			myIterator(reference const o) {
-				_array = o;
-			}
-			~myIterator(void);
-			reference operator=(reference const o) {
-			
-				_array = o;
-				return (*this);
-			}
-			reference operator*() const { return *_array; }
-			pointer operator->() { return _array; }
+			return a._array != b._array;
+		};
+		myIterator &operator++() {
+		
+			_array++;
+			return *this;
+		}
+		myIterator operator++(int) {
+		
+			myIterator tmp = *this;
+			++(*this);
+			return tmp;
+		}
 
 
+	};
+	myIterator begin() {
+
+		return (_elements[0]);
 	}
 
+	myIterator end() {
 
+		return (_elements[_size - 1]);
+	}
 	typedef  T value_type;
 	typedef Allocator allocator_type;
 	typedef size_t size_type;
@@ -256,7 +284,6 @@ template<
 		if (_size + 1 > _capacity) {
 			reserve((_size + 1) * 2);
 		}
-		std::cout << "wslt hna" << std::endl;
 		_alloc.construct(_elements, val);
 		_size++;
 	}
@@ -308,7 +335,8 @@ template<
 			std::cout << "destroyed  id " << i  << " value " << _elements[i] << std::endl;
 			_alloc.destroy(_elements + i);
 		}
-		_alloc.deallocate(_elements, _size);
+		// if (_elements != NULL)
+		// 	_alloc.deallocate(_elements, _size);
 	}
 };	
 
