@@ -20,11 +20,6 @@ template<
 		T *_array;
 		public:
 		// defining tags
-		// using iterator_category =  std::random_access_iterator_tag;
-		// using difference_type = std::ptrdiff_t;
-		// using value_type = T;
-		// using pointer = T*;
-		// using reference = T&;
 
 		typedef std::random_access_iterator_tag  iterator_category;
 		typedef	std::ptrdiff_t	difference_type;
@@ -115,9 +110,15 @@ template<
 	typedef  T value_type;
 	typedef Allocator allocator_type;
 	typedef size_t size_type;
-
+	typedef T* pointer;
+	typedef const T* const_pointer;
 	typedef  T& reference;
 	typedef const T& const_reference;
+	typedef myIterator iterator;
+	typedef const myIterator const_iterator;
+	// typedef /// reverse_iterator;
+	// typedef /// const_reserve_iterator;
+
 //	default (1)	
 	explicit Vector (const allocator_type& alloc = allocator_type()) {
 	
@@ -134,20 +135,19 @@ template<
 		_size = n;
 		_capacity = n;
 		for (int i=0; i < n ; i++) {
-			// std::cout << val << std::endl;
 			_alloc.construct(_elements + i, val);
 		}
 	}
-	~Vector() {
+	~Vector( void ) {
 	
-		// for (int i=0; i < n ; i++) {
-		// 	std::cout << val << std::endl;
-		// 	_alloc.destroy(_elements + i, val);
-		// }
+		for (int i=0; i < _size ; i++) {
+
+			_alloc.destroy(_elements + i);
+		}
 		_alloc.deallocate(_elements, _capacity);
 	}
 
-	Vector& operator= (const Vector& x) {
+	Vector& operator=(const Vector& x) {
 
 		_alloc.deallocate(_elements, _capacity);
 		_alloc.allocate(x.size());
@@ -169,8 +169,7 @@ template<
 			_alloc.construct(_elements + index, *i);
 		}
 	}
-
-// //	copy (4)	
+	
 	Vector (const Vector& x) {
 	
 		for (int i=0;i < _size;i++) {
@@ -183,11 +182,11 @@ template<
 		}
 	}
 
-	size_type size() const {
+	size_type size( void ) const {
 	
 		return _size;
 	}
-	size_type max_size() const {
+	size_type max_size( void ) const {
 	
 		return _alloc.max_size() / sizeof(T);
 	}
@@ -217,7 +216,7 @@ template<
 	
 		if (_size == 0)
 			_elements = _alloc.allocate(n);
-		// std::cout << "n is " << n <<  " size is " << _size << std::endl;
+
 		if (n > _size) {
 
 			int current;
@@ -227,9 +226,7 @@ template<
 			if (_size == 0) {
 				current = 0;
 			}
-			// _elements = _alloc.allocate(n);
 			for (int i=(_size ); i < n ; i++) {
-				// std::cout << val   << std::endl;
 				_alloc.construct(_elements + i, val);
 				_size++;
 			}
@@ -242,7 +239,6 @@ template<
 			current = _size - n;
 			for (int i=current; i < _size; i++) {
 			
-				// std::cout << val << std::endl;
 				_alloc.destroy(_elements + i);
 			}
 			// _alloc.deallocate(_elements, _capacity);
@@ -339,16 +335,41 @@ template<
 			_size--;
 		}
 	}
-	// 	range (1)	
-	// template <class InputIterator>
-	//   void assign (InputIterator first, InputIterator last);
+	// 	range (1)
+	void assign (myIterator first, myIterator last) {
+	
+		size_t size = std::distance(first, last);
+		// for (myIterator i = first; i <  last; i++) {
+			
+		// }
+		if (_capacity < size) {
+		
+			resize(size);
+		}
+		// _elements = _alloc.allocate(size);
+		for ( int i=0;i<size;i++) {
+		
+			_alloc.construct(_elements + i, *first);
+			first++;
+		}
+	}
 	// fill (2)	
-	// void assign (size_type n, const value_type& val); 
+	void assign (size_type n, const value_type& val) {
+	
+		if (_capacity < n) {
+
+			resize(n);
+		}
+		for ( int i=0;i<n;i++) {
+		
+			_alloc.construct(_elements + i, val);
+		}
+	}
 
 
 
 // 	single element (1)	
-// iterator insert (iterator position, const value_type& val);
+iterator insert (iterator position, const value_type& val);
 // fill (2)	
 //     void insert (iterator position, size_type n, const value_type& val);
 // range (3)	
