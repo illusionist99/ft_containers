@@ -26,27 +26,28 @@ template<
 		typedef T value_type;
 		typedef T*  pointer;
 		typedef T& reference;
-		myIterator(pointer array) : _array(array) {}
+		myIterator( pointer array = NULL) : _array(array) {}
 		myIterator( reference o) {
-			_array = o._array;
+			_array = &o;
 		}
-		~myIterator(void);
+		virtual ~myIterator(void) {}
 		reference operator=( reference o) {
 		
 			_array = o;
 			return (*this);
 		}
+		T	*getptr() const { return _array;}
 		reference operator*() const { return *_array; }
 		pointer operator->() { return _array; }
 
-		friend bool operator== ( reference a,  reference b) {
+		friend bool operator== ( myIterator& a,  myIterator& b) {
 
 			return a._array == b._array;
-		};
-		friend bool operator!= ( myIterator& a,  myIterator& b) {
+		}
+		bool operator!=( myIterator const & b) {
 			
-			return a._array != b._array;
-		};
+			return _array != b.getptr();
+		}
 		myIterator &operator++() {
 		
 			_array++;
@@ -69,12 +70,12 @@ template<
 			--(*this);
 			return tmp;
 		}
-		friend value_type operator+(value_type v, reference val) {
+		friend value_type operator+(value_type v, myIterator& val) {
 		
 			v += val;
 			return (v);
 		}
-		friend value_type operator-(value_type v, reference val) {
+		friend value_type operator-(value_type v, myIterator& val) {
 		
 			v -= val;
 			return (v);
@@ -100,12 +101,12 @@ template<
 	};
 	myIterator begin() {
 
-		return (_elements[0]);
+		return (myIterator(_elements[0]));
 	}
 
 	myIterator end() {
 
-		return (_elements[_size - 1]);
+		return (myIterator(_elements[_size]));
 	}
 	typedef  T value_type;
 	typedef Allocator allocator_type;
@@ -127,17 +128,19 @@ template<
 		_size = 0;
 		_capacity = 0;
 	}
-//	fill (2)	
+//	fill (2)
 	explicit Vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) {
 	
 		std::cout << "default constructor with size" << std::endl;
 		_elements = _alloc.allocate(n);
-		_size = n;
 		_capacity = n;
+		if (val)
+			_size = n;
 		for (int i=0; i < n ; i++) {
 			_alloc.construct(_elements + i, val);
 		}
 	}
+
 	~Vector( void ) {
 	
 		for (int i=0; i < _size ; i++) {
@@ -157,14 +160,14 @@ template<
 		}
 		return (*this);
 	}
-// //	range (3)	
-	template <class InputIterator>
-	Vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) {
+// //	range (3)
+	template <class inputIterator>
+	Vector (inputIterator first, inputIterator last, const allocator_type& alloc = allocator_type()) {
 	
 		size_t size = std::distance(first, last);
 		size_t index = 0;
 		_elements = _alloc.allocate(size);
-		for (InputIterator i = first; i < last; i++) {
+		for (inputIterator i = first; i < last; i++) {
 		
 			_alloc.construct(_elements + index, *i);
 		}
@@ -188,7 +191,7 @@ template<
 	}
 	size_type max_size( void ) const {
 	
-		return _alloc.max_size() / sizeof(T);
+		return _alloc.max_size();
 	}
 
 	void reserve (size_type n) {
@@ -319,11 +322,12 @@ template<
 		{
 			_elements = _alloc.allocate(2);
 			_capacity = 2;
+			
 		}
 		if (_size + 1 > _capacity) {
 			reserve((_size + 1) * 2);
 		}
-		_alloc.construct(_elements, val);
+		_alloc.construct(_elements + _size, val);
 		_size++;
 	}
 
@@ -336,7 +340,8 @@ template<
 		}
 	}
 	// 	range (1)
-	void assign (myIterator first, myIterator last) {
+	template <typename inputIter>
+	void assign (inputIter first, inputIter last) {
 	
 		size_t size = std::distance(first, last);
 		// for (myIterator i = first; i <  last; i++) {
