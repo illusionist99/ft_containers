@@ -65,32 +65,51 @@
 //         std::cout << e.what() << std::endl;
 //     }
 //     return (0);
-// }
- int main() {
+// // }
+//  int main() {
     
-   std::vector<int *> p;
-   Vector<int > g(6);
-   Vector<int >::iterator it;
-   g.push_back(25);
-   g.push_back(25);
-   g.push_back(25);
-   g.push_back(25);
-   g.push_back(25);
+//    std::vector<int *> p;
+//    Vector<int > g(6);
+//    Vector<int >::iterator it;
+//    g.push_back(25);
+//    g.push_back(25);
+//    g.push_back(25);
+//    g.push_back(25);
+//    g.push_back(25);
 
 
-   // std::cout << *it << std::endl;
-   std::cout << g.size() << std::endl;
-   // std::cout << g.size() << std::endl;
-   for (it = g.begin(); it != g.end(); it++){
+//    // std::cout << *it << std::endl;
+//    std::cout << g.size() << std::endl;
+//    // std::cout << g.size() << std::endl;
+//    for (it = g.begin(); it != g.end(); it++){
    
-      std::cout << *it << std::endl;
-   }
-    std::cout << "org max_size " << p.max_size() << std::endl;
-    std::cout << "new max_size " << g.max_size() << std::endl;
+//       std::cout << *it << std::endl;
+//    }
+//     std::cout << "org max_size " << p.max_size() << std::endl;
+//     std::cout << "new max_size " << g.max_size() << std::endl;
     
     
+int main ()
+{
+  unsigned int i;
+  Vector<int> foo (3,100);   // three ints with a value of 100
+  Vector<int> bar (5,200);   // five ints with a value of 200
 
- }
+  foo.swap(bar);
+
+  std::cout << "foo contains:";
+  for (Vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
+
+  std::cout << "bar contains:";
+  for (Vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
+
+  return 0;
+}
+//  }
 // int main()
 // {
 //     // Create a vector containing integers

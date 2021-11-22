@@ -129,7 +129,8 @@ template<
 		_capacity = 0;
 	}
 //	fill (2)
-	explicit Vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) {
+	explicit Vector (size_type n, const value_type& val = value_type(),
+                 const allocator_type& alloc = allocator_type()) {
 	
 		std::cout << "default constructor with size" << std::endl;
 		_elements = _alloc.allocate(n);
@@ -161,25 +162,25 @@ template<
 		return (*this);
 	}
 // //	range (3)
-	template <class inputIterator>
-	Vector (inputIterator first, inputIterator last, const allocator_type& alloc = allocator_type()) {
+	//a letrt cancer
+	// template <class inputIterator>
+	Vector (myIterator first, myIterator last, const allocator_type& alloc = allocator_type()) {
 	
-		size_t size = std::distance(first, last);
+		int size = last - first;
 		size_t index = 0;
 		_elements = _alloc.allocate(size);
-		for (inputIterator i = first; i < last; i++) {
+		for (myIterator i = first; i < last; i++) {
 		
-			_alloc.construct(_elements + index, *i);
+			_alloc.construct(_elements + index, i);
+			index++;
 		}
 	}
 	
 	Vector (const Vector& x) {
-	
-		for (int i=0;i < _size;i++) {
-			_alloc.destroy(_elements + i);
-		}
-		_alloc.deallocate(_elements, _capacity);
-		_alloc.allocate(x.size());
+
+		_alloc.allocate(x.capacity());
+		_capacity = x.capacity();
+		_size = x.size();
 		for (int i=0;i < x.size(); i++) {
 			_alloc.construct(_elements + i, x[i]);
 		}
@@ -385,17 +386,9 @@ iterator insert (iterator position, const value_type& val);
 	// iterator erase (iterator first, iterator last);
 	void swap (Vector& x) {
 	
-		T * c(*this);
-		int v = _size;
-		reserve(x.size());
-		*this = x;
-		x.reserve(v);
-		x = c;
-		for (int i=0;i < _size; i++) {
-		
-			_alloc.destroy(c + i);
-		}
-		_alloc.deallocate(c, v);
+		std::swap(_elements, x._elements);
+		std::swap(_size, x._size);
+		std::swap(_capacity, x._capacity);
 	}
 	void clear() {
 	
@@ -411,5 +404,65 @@ iterator insert (iterator position, const value_type& val);
 			_elements = NULL;
 		}
 	}
-};	
+
+
+	allocator_type get_allocator(void) const {
+		return (_alloc);
+	}
+};
+
+
+template <class T, class Alloc>
+bool operator== (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+
+	if (lhs.size() == rhs.size()) {
+		return std::equal(lhs.begin(), lhs.end(), rhs.begin());
+	}
+	return false;
+}
+
+	
+template <class T, class Alloc>
+bool operator!= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+
+	return !(lhs ==  rhs);
+}
+
+template <class T, class Alloc>
+bool operator<(const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+
+	return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+
+}
+
+template <class T, class Alloc>
+bool operator<= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+
+	return !(rhs < lhs);
+}
+
+	
+template <class T, class Alloc>
+bool operator>  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+
+	return (rhs < lhs);
+}
+
+	
+template <class T, class Alloc>
+bool operator>= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+
+	return !(lhs < rhs);
+}
+
+
+template <class T, class Alloc>
+void swap (Vector<T, Alloc>& x, Vector<T,Alloc>& y) {
+
+	Vector<T, Alloc> s = x;
+
+	x.swap(y);
+	y.swap(s);
+}
+
 
