@@ -99,6 +99,29 @@ template<
 			return !(*_array < rval);
 		}
 	};
+
+	template <class Iterator>
+	class reverse_iterator {
+		
+
+		public:
+			typedef Iterator iterator_type;
+			typedef typename	std::iterator_traits<Iterator>::iterator_category iterator_category;
+			typedef typename	std::iterator_traits<Iterator>::value_type value_type;
+			typedef typename	std::iterator_traits<Iterator>::difference_type difference_type;
+			typedef typename	std::iterator_traits<Iterator>::pointer pointer;
+			typedef typename	std::iterator_traits<Iterator>::reference reference;
+			
+			reverse_iterator(iterator_type o = NULL) {
+			
+
+			}
+
+			~reverse_iterator( void );
+	};
+
+
+
 	myIterator begin() {
 
 		return (myIterator(_elements[0]));
@@ -464,5 +487,3 @@ void swap (Vector<T, Alloc>& x, Vector<T,Alloc>& y) {
 	x.swap(y);
 	y.swap(s);
 }
-
-
