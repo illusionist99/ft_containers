@@ -3,6 +3,41 @@
 # include <iostream>
 # include <string>
 
+
+namespace ft {
+
+template< class Iter >
+struct iterator_traits {
+
+	typedef typename Iter::difference_type difference_type;
+	typedef typename Iter::value_type value_type;
+	typedef typename Iter::pointer pointer;
+	typedef typename Iter::reference reference;
+	typedef typename Iter::iterator_category iterator_category;
+};
+
+template< class T >
+struct iterator_traits<T*> {
+
+	typedef std::ptrdiff_t difference_type;
+	typedef T value_type;
+	typedef T* pointer;
+	typedef T& reference;
+	typedef std::random_access_iterator_tag iterator_category;
+};
+
+template< class T >
+struct iterator_traits<const T*> {
+
+	typedef std::ptrdiff_t difference_type;
+	typedef T value_type;
+	typedef T* pointer;
+	typedef T& reference;
+	typedef std::random_access_iterator_tag iterator_category;
+};
+
+};
+
 template<
     class T,
     class Allocator = std::allocator<T>
@@ -21,7 +56,7 @@ template<
 		public:
 		// defining tags
 
-		typedef std::random_access_iterator_tag  iterator_category;
+		typedef ft::iterator_traits<T>  iterator_category;
 		typedef	std::ptrdiff_t	difference_type;
 		typedef T value_type;
 		typedef T*  pointer;
@@ -80,23 +115,23 @@ template<
 			v -= val;
 			return (v);
 		}
-		inline bool operator< (reference rval){ 
+		bool operator< (myIterator& rval){ 
 
-			return (rval < *_array);	
+			return (*rval < *_array);	
 		}
-		inline bool operator> (reference rval) {
+		bool operator> (myIterator& rval) {
 			
-			return rval < *_array;
+			return (*rval < *_array);
 		}
 		
-		inline bool operator<=(reference rval) {
+		bool operator<=(myIterator& rval) {
 		
-			return !(*_array > rval);
+			return !(*_array > *rval);
 		}
 		
-		inline bool operator>=(reference rval) {
+		bool operator>=(myIterator& rval) {
 		
-			return !(*_array < rval);
+			return !(*_array < *rval);
 		}
 	};
 
@@ -398,7 +433,16 @@ template<
 
 
 // 	single element (1)	
-iterator insert (iterator position, const value_type& val);
+iterator insert (iterator position, const value_type& val) {
+
+	iterator it = begin();
+	for (iterator it = begin(); it < position; it++)
+	{
+
+	}
+	*it = val;
+	return it;
+}
 // fill (2)	
 //     void insert (iterator position, size_type n, const value_type& val);
 // range (3)	

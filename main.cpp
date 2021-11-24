@@ -87,28 +87,56 @@
 //    }
 //     std::cout << "org max_size " << p.max_size() << std::endl;
 //     std::cout << "new max_size " << g.max_size() << std::endl;
-    
-    
+#include <iostream>
+
+
 int main ()
 {
-  unsigned int i;
-  Vector<int> foo (3,100);   // three ints with a value of 100
-  Vector<int> bar (5,200);   // five ints with a value of 200
+  Vector<int> myvector (3,100);
+  Vector<int>::iterator it;
 
-  foo.swap(bar);
+  it = myvector.begin();
+  it = myvector.insert ( it , 200 );
 
-  std::cout << "foo contains:";
-  for (Vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+  // myvector.insert (it,2,300);
 
-  std::cout << "bar contains:";
-  for (Vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
+  // "it" no longer valid, get a new one:
+  it = myvector.begin();
+
+  Vector<int> anothervector (2,400);
+  // myvector.insert (it+2,anothervector.begin(),anothervector.end());
+
+  int myarray [] = { 501,502,503 };
+  // myvector.insert (myvector.begin(), myarray, myarray+3);
+
+  std::cout << "myvector contains:";
+  for (it=myvector.begin(); it < myvector.end(); it++)
     std::cout << ' ' << *it;
   std::cout << '\n';
 
   return 0;
-}
+}    
+    
+// int main ()
+// {
+//   unsigned int i;
+//   Vector<int> foo (3,100);   // three ints with a value of 100
+//   Vector<int> bar (5,200);   // five ints with a value of 200
+
+//   foo.swap(bar);
+
+//   std::cout << "foo contains:";
+//   for (Vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
+//     std::cout << ' ' << *it;
+//   std::cout << '\n';
+
+//   std::cout << "bar contains:";
+//   for (Vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
+//     std::cout << ' ' << *it;
+//   std::cout << '\n';
+
+//   return 0;
+// }
 //  }
 // int main()
 // {
